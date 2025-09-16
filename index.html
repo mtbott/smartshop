@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Shop for Android TV Boxes, WiFi Routers, 5G Phones, and Smart WiFi Bulbs.">
+  <meta name="keywords" content="Android TV Box, WiFi Router, 5G Phones, Smart Bulbs, electronics shop">
+  <title>MTB Electronics Shop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* General Styles & Themes */
+    :root {
+      --bg-light: #f4f4f4;
+      --text-light: #333;
+      --card-bg-light: white;
+      --header-bg-light: #222;
+      
+      --bg-dark: #121212;
+      --text-dark: #f4f4f4;
+      --card-bg-dark: #1f1f1f;
+      --header-bg-dark: #1f1f1f;
+
+      /* Default Theme: Blue */
+      --primary-color: #007bff;
+      --primary-hover: #0056b3;
+      --accent-color: #28a745;
+      --accent-hover: #218838;
+    }
+    .theme-ocean {
+      --primary-color: #17a2b8;
+      --primary-hover: #117a8b;
+      --accent-color: #20c997;
+      --accent-hover: #199d79;
+    }
+    .theme-sunset {
+      --primary-color: #fd7e14;
+      --primary-hover: #d3650c;
+      --accent-color: #dc3545;
+      --accent-hover: #b52b39;
+    }
+    .theme-forest {
+        --primary-color: #28a745;
+        --primary-hover: #1e7e34;
+        --accent-color: #ffc107;
+        --accent-hover: #d39e00;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: background-color 0.4s, color 0.4s;
+      line-height: 1.6;
+    }
+    body.dark-mode {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    /* Header */
+    header {
+      background-color: var(--header-bg-light);
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 600;
+      position: relative;
+      border-bottom: 3px solid var(--primary-color);
+      transition: border-color 0.4s;
+    }
+    body.dark-mode header {
+        background-color: var(--header-bg-dark);
+    }
+    .header-icons {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 15px;
+        display: flex;
+        gap: 10px;
+    }
+    .discount-toggle, .dark-toggle {
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      transition: transform 0.2s ease;
+    }
+    .discount-toggle:hover, .dark-toggle:hover {
+        transform: scale(1.1);
+    }
+    .theme-switcher {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 15px;
+        display: flex;
+        gap: 8px;
+    }
+    .theme-dot {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid white;
+        transition: transform 0.2s ease;
+    }
+    .theme-dot:hover {
+        transform: scale(1.2);
+    }
+
+    /* Main Container & On-Scroll Animation */
+    .container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 20px auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+    }
+    .product-card {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .product-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Product Card Styles */
+    .product-card {
+      perspective: 1000px;
+      min-height: 420px;
+    }
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.7s, box-shadow 0.3s;
+      transform-style: preserve-3d;
+      border-radius: 15px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      background: var(--card-bg-light);
+    }
+    .product-card:hover .card-inner {
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    body.dark-mode .card-inner {
+      background: var(--card-bg-dark);
+    }
+    .product-card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+      text-align: center;
+      padding: 20px;
+    }
+    .card-back {
+      transform: rotateY(180deg);
+      background: #f0f0f0;
+    }
+    body.dark-mode .card-back {
+      background: #2a2a2a;
+    }
+
+    /* Card Content */
+    .product-image {
+      max-width: 120px;
+      height: 120px;
+      object-fit: contain;
+    }
+    .product-card h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-top: 5px;
+    }
+    .product-price {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary-color);
+      transition: color 0.4s;
+    }
+    .product-price .mrp {
+      font-size: 14px;
+      text-decoration: line-through;
+      color: #888;
+      margin-left: 8px;
+    }
+    .plan-tabs {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+      gap: 10px;
+    }
+    .plan-tab {
+      background-color: #e0e0e0;
+      border: 1px solid transparent;
+      padding: 8px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+    body.dark-mode .plan-tab {
+      background-color: #333;
+    }
+    .plan-tab.active {
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: 600;
+    }
+    .pay-btn {
+      background-color: var(--accent-color);
+      color: white;
+      padding: 10px 25px;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 16px;
+      margin-top: 10px;
+      transition: background-color 0.4s, transform 0.2s;
+    }
+    .pay-btn:hover {
+      background-color: var(--accent-hover);
+      transform: translateY(-2px);
+    }
+    .add-to-cart-btn-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+    .add-to-cart-btn {
+        background-color: var(--accent-color);
+        color: white;
+        padding: 10px 25px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.4s, transform 0.2s;
+    }
+    .add-to-cart-btn:hover {
+        background-color: var(--accent-hover);
+        transform: translateY(-2px);
+    }
+    .quantity-controls {
+        display: none;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .quantity-controls button {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        font-size: 20px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    .quantity-controls button:hover {
+        background: var(--primary-hover);
+    }
+    .quantity-controls .quantity-value {
+        min-width: 25px;
+        text-align: center;
+    }
+    .flip-indicator {
+      font-size: 12px;
+      color: #777;
+      margin-top: 5px;
+    }
+    body.dark-mode .flip-indicator {
+      color: #aaa;
+    }
+    .qr-code { max-width: 150px; height: auto; margin: 15px 0; }
+    .qr-text { font-size: 16px; font-weight: 500; }
+    
+    /* Discount Sidebar */
+    .discount-sidebar {
+      position: fixed;
+      top: 0;
+      left: -300px;
+      width: 300px;
+      height: 100%;
+      background: var(--card-bg-light);
+      padding: 20px;
+      transition: left 0.4s ease;
+      z-index: 1001;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+    }
+    .discount-sidebar.open { left: 0; }
+    body.dark-mode .discount-sidebar { background: var(--card-bg-dark); }
+    .discount-sidebar h3 { font-size: 20px; margin-bottom: 15px; color: var(--primary-color); }
+    .discount-sidebar ul { list-style: none; padding-left: 0; margin-bottom: 20px; }
+    .discount-sidebar li { font-size: 14px; margin-bottom: 10px; }
+    .discount-input { display: flex; gap: 10px; margin-bottom: 20px; }
+    #discount-code { padding: 8px; border-radius: 5px; border: 1px solid #ccc; font-size: 14px; flex: 1; }
+    .discount-sidebar button { background: var(--accent-color); color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
+
+    /* Info (!) Button and Modal */
+    .info-icon { position: absolute; top: 15px; right: 15px; width: 28px; height: 28px; background-color: var(--primary-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; z-index: 10; font-family: 'Arial', sans-serif; transition: background-color 0.4s; }
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; }
+    .modal-overlay.show { opacity: 1; visibility: visible; }
+    .modal-content { background: var(--card-bg-light); padding: 30px; border-radius: 10px; max-width: 500px; width: 90%; position: relative; transform: scale(0.9); transition: transform 0.3s, background-color 0.4s; }
+    body.dark-mode .modal-content { background: var(--card-bg-dark); }
+    .modal-overlay.show .modal-content { transform: scale(1); }
+    .modal-content h3 { margin-bottom: 15px; color: var(--primary-color); }
+    .modal-close { position: absolute; top: 15px; right: 15px; font-size: 24px; cursor: pointer; border: none; background: none; color: inherit; }
+
+    /* Footer */
+    footer {
+        text-align: center;
+        padding: 2em;
+        background: var(--header-bg-light);
+        color: #ccc;
+        border-top: 3px solid var(--primary-color);
+        margin-top: 40px;
+        transition: border-color 0.4s, background-color 0.4s;
+    }
+    body.dark-mode footer { background: var(--header-bg-dark); }
+    footer p { font-size: 14px; margin-bottom: 10px; }
+    footer a { color: var(--accent-color); text-decoration: none; font-weight: 600; }
+    footer .whatsapp-link { display: inline-block; margin-top: 10px; padding: 10px 20px; background-color: #25D366; color: white; border-radius: 25px; text-decoration: none; font-weight: bold; transition: transform 0.2s, box-shadow 0.2s; }
+    footer .whatsapp-link:hover { transform: scale(1.05); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+
+    /* New Cart Styles */
+    .cart-icon {
+        position: relative;
+        cursor: pointer;
+        width: 32px;
+        height: 32px;
+    }
+    .cart-icon img {
+        width: 100%;
+        height: 100%;
+    }
+    .cart-counter {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background-color: var(--accent-color);
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 600;
+    }
+    .cart-sidebar {
+        position: fixed;
+        top: 0;
+        right: -350px;
+        width: 350px;
+        height: 100%;
+        background: var(--card-bg-light);
+        padding: 20px;
+        transition: right 0.4s ease;
+        z-index: 1001;
+        box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+        display: flex;
+        flex-direction: column;
+    }
+    .cart-sidebar.open {
+        right: 0;
+    }
+    body.dark-mode .cart-sidebar {
+        background: var(--card-bg-dark);
+    }
+    .cart-sidebar h3 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: var(--primary-color);
+    }
+    #cart-items {
+        flex-grow: 1;
+        overflow-y: auto;
+        margin-bottom: 20px;
+    }
+    .cart-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 10px 0;
+        border-bottom: 1px solid #ccc;
+    }
+    .cart-item:last-child {
+        border-bottom: none;
+    }
+    .cart-item-img {
+        width: 60px;
+        height: 60px;
+        object-fit: contain;
+    }
+    .cart-item-details {
+        flex-grow: 1;
+    }
+    .cart-item-details h4 {
+        font-size: 16px;
+        margin: 0;
+    }
+    .cart-item-details p {
+        font-size: 14px;
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+    .remove-item-btn {
+        background: none;
+        border: none;
+        color: #dc3545;
+        font-size: 20px;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+    .remove-item-btn:hover {
+        transform: scale(1.1);
+    }
+    .cart-summary {
+        border-top: 2px solid #ccc;
+        padding-top: 10px;
+    }
+    body.dark-mode .cart-summary {
+        border-top: 2px solid #555;
+    }
+    .cart-summary p {
+        display: flex;
+        justify-content: space-between;
+        font-size: 16px;
+        margin: 5px 0;
+    }
+    .cart-total-price {
+        font-size: 20px !important;
+        font-weight: bold;
+        color: var(--primary-color) !important;
+    }
+    #checkout-btn {
+        width: 100%;
+        text-align: center;
+        margin-top: 20px;
+    }
+    .cart-header {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .cart-close-btn {
+        position: absolute;
+        right: 0;
+        top: 0;
+        font-size: 40px;
+        line-height: 1;
+        background: none;
+        border: none;
+        color: inherit;
+        cursor: pointer;
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+        header {
+            flex-direction: column;
+            padding: 10px;
+            align-items: center;
+        }
+        .theme-switcher {
+            position: static;
+            transform: none;
+            margin-bottom: 10px;
+        }
+        .header-icons {
+            position: static;
+            transform: none;
+            width: 100%;
+            justify-content: space-around;
+        }
+        .cart-sidebar {
+            width: 100%;
+        }
+        .cart-close-btn {
+            top: 10px;
+            right: 10px;
+        }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="theme-switcher">
+        <div class="theme-dot" style="background: #007bff;" data-theme="default" title="Default Blue"></div>
+        <div class="theme-dot" style="background: #17a2b8;" data-theme="theme-ocean" title="Ocean Blue"></div>
+        <div class="theme-dot" style="background: #fd7e14;" data-theme="theme-sunset" title="Sunset Orange"></div>
+        <div class="theme-dot" style="background: #28a745;" data-theme="theme-forest" title="Forest Green"></div>
+    </div>
+    MTB Electronics Shop
+    <div class="header-icons">
+        <img src="https://img.icons8.com/ios-filled/50/ffffff/discount.png" class="discount-toggle" onclick="toggleDiscountSidebar()" title="View Discounts" />
+        <img id="toggle-icon" src="https://img.icons8.com/ios-filled/50/ffffff/moon-symbol.png" class="dark-toggle" onclick="toggleDarkMode()" title="Toggle Dark Mode" />
+        <div class="cart-icon" onclick="toggleCartSidebar()">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/shopping-cart.png" alt="Cart" title="View Cart" />
+            <span id="cart-counter" class="cart-counter">0</span>
+        </div>
+    </div>
+  </header>
+
+  <div id="discount-sidebar" class="discount-sidebar">
+    <h3>Special Offers</h3>
+    <ul>
+      <li><strong>SAVE10:</strong> 10% off on all products.</li>
+      <li><strong>BIGSALE:</strong> ₹100 off on orders above ₹2000.</li>
+      <li><strong>NEWUSER:</strong> Flat ₹50 off on first purchase.</li>
+    </ul>
+    <div class="discount-input">
+      <input type="text" id="discount-code" placeholder="Enter Code" />
+      <button onclick="applyDiscount()">Apply</button>
+    </div>
+    <button onclick="toggleDiscountSidebar()">Close</button>
+  </div>
+
+  <div id="cart-sidebar" class="cart-sidebar">
+    <div class="cart-header">
+        <h3>Your Cart</h3>
+        <button class="cart-close-btn" onclick="toggleCartSidebar()">&times;</button>
+    </div>
+    <div id="cart-items"></div>
+    <div class="cart-summary">
+        <p>Subtotal: <span id="cart-subtotal">₹0</span></p>
+        <p>Discount: <span id="cart-discount">₹0</span></p>
+        <p class="cart-total-price">Total: <span id="cart-total">₹0</span></p>
+    </div>
+    <a id="checkout-btn" class="pay-btn" href="#">Proceed to Checkout</a>
+    <img class="qr-code" id="cart-qr-code" src="" alt="UPI QR Code">
+    <p class="qr-text" id="cart-qr-text">Scan to Pay</p>
+  </div>
+
+  <div class="container">
+    <div class="product-card" data-product-name="Android TV Box 4K"
+         data-plans='{"monthly": {"price": 1780, "display": "₹180/mo + ₹1600 Install"}, "lifetime": {"price": 8999, "display": "₹8999"}}'
+         data-info="<h3>Android TV Box T&Cs</h3><p>The monthly plan requires an initial payment covering the first month and the installation fee. All hardware remains the property of MTB Electronics under the monthly plan. Lifetime plan includes ownership of the device. Warranty is valid for 1 year on all devices.</p>">
+      <div class="card-inner">
+        <div class="card-front">
+          <div class="info-icon">!</div>
+          <img src="https://i.imgur.com/8xYSc2n.png" alt="Android TV Box" class="product-image">
+          <h2>Android TV Box 4K</h2>
+          <div class="plan-tabs">
+            <button class="plan-tab active" data-plan="monthly">Monthly</button>
+            <button class="plan-tab" data-plan="lifetime">Lifetime</button>
+          </div>
+          <p class="product-price">₹180/mo + ₹1600 Install <span class="mrp">₹2999</span></p>
+          <div class="add-to-cart-btn-container">
+            <button class="add-to-cart-btn">Add to Cart</button>
+            <div class="quantity-controls">
+                <button class="quantity-minus">-</button>
+                <span class="quantity-value">1</span>
+                <button class="quantity-plus">+</button>
+            </div>
+          </div>
+          <div class="flip-indicator">Tap card for QR Code</div>
+        </div>
+        <div class="card-back">
+          <a class="pay-btn" href="#" target="_blank">Pay Now</a>
+          <img class="qr-code" src="" alt="UPI QR Code">
+          <p class="qr-text">Scan to Pay</p>
+        </div>
+      </div>
+    </div>
+    <div class="product-card" data-product-name="Dual-Band WiFi Router"
+         data-plans='{"default": {"price": 1999, "display": "₹1999"}}'
+         data-info="<h3>WiFi Router T&Cs</h3><p>This router supports speeds up to 1200 Mbps. Comes with a 2-year manufacturer warranty. Professional installation is available for an additional fee. Please contact us for details.</p>">
+      <div class="card-inner">
+        <div class="card-front">
+          <div class="info-icon">!</div>
+          <img src="https://i.imgur.com/KDKaIay.png" alt="WiFi Router" class="product-image">
+          <h2>Dual-Band WiFi Router</h2>
+          <p class="product-price">₹1999 <span class="mrp">₹3499</span></p>
+          <div class="add-to-cart-btn-container">
+            <button class="add-to-cart-btn">Add to Cart</button>
+            <div class="quantity-controls">
+                <button class="quantity-minus">-</button>
+                <span class="quantity-value">1</span>
+                <button class="quantity-plus">+</button>
+            </div>
+          </div>
+          <div class="flip-indicator">Tap card for QR Code</div>
+        </div>
+        <div class="card-back">
+          <a class="pay-btn" href="#" target="_blank">Pay Now</a>
+          <img class="qr-code" src="" alt="UPI QR Code">
+          <p class="qr-text">Scan to Pay</p>
+        </div>
+      </div>
+    </div>
+    <div class="product-card" data-product-name="Affordable 5G Phone"
+         data-plans='{"default": {"price": 9999, "display": "₹9999"}}'
+         data-info="<h3>5G Smartphone T&Cs</h3><p>This is an entry-level 5G smartphone. Price is inclusive of all taxes. Comes with a 1-year brand warranty. Charger and cable are included in the box. No-cost EMI options are available.</p>">
+      <div class="card-inner">
+        <div class="card-front">
+          <div class="info-icon">!</div>
+          <img src="https://i.imgur.com/R3854gG.png" alt="5G Phone" class="product-image">
+          <h2>Affordable 5G Phone</h2>
+          <p class="product-price">₹9999 <span class="mrp">₹12999</span></p>
+          <div class="add-to-cart-btn-container">
+            <button class="add-to-cart-btn">Add to Cart</button>
+            <div class="quantity-controls">
+                <button class="quantity-minus">-</button>
+                <span class="quantity-value">1</span>
+                <button class="quantity-plus">+</button>
+            </div>
+          </div>
+          <div class="flip-indicator">Tap card for QR Code</div>
+        </div>
+        <div class="card-back">
+          <a class="pay-btn" href="#" target="_blank">Pay Now</a>
+          <img class="qr-code" src="" alt="UPI QR Code">
+          <p class="qr-text">Scan to Pay</p>
+        </div>
+      </div>
+    </div>
+    <div class="product-card" data-product-name="Smart WiFi Bulb"
+         data-plans='{"default": {"price": 699, "display": "₹699"}}'
+         data-info="<h3>Smart WiFi Bulb T&Cs</h3><p>16 million colors. Works with Alexa and Google Assistant. Requires a 2.4GHz WiFi connection. One year warranty against manufacturing defects. The controlling app is available on both Android and iOS.</p>">
+      <div class="card-inner">
+        <div class="card-front">
+          <div class="info-icon">!</div>
+          <img src="https://i.imgur.com/uG90vAn.png" alt="Smart Bulb" class="product-image">
+          <h2>Smart WiFi Bulb</h2>
+          <p class="product-price">₹699 <span class="mrp">₹1199</span></p>
+          <div class="add-to-cart-btn-container">
+            <button class="add-to-cart-btn">Add to Cart</button>
+            <div class="quantity-controls">
+                <button class="quantity-minus">-</button>
+                <span class="quantity-value">1</span>
+                <button class="quantity-plus">+</button>
+            </div>
+          </div>
+          <div class="flip-indicator">Tap card for QR Code</div>
+        </div>
+        <div class="card-back">
+          <a class="pay-btn" href="#" target="_blank">Pay Now</a>
+          <img class="qr-code" src="" alt="UPI QR Code">
+          <p class="qr-text">Scan to Pay</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="info-modal">
+    <div class="modal-content">
+      <button class="modal-close">&times;</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 - MTB Electronics Shop</p>
+    <p>Built with ❤️ by Sanket | For support, contact us on WhatsApp.</p>
+    <a href="https://api.whatsapp.com/send?phone=919091544508" target="_blank" class="whatsapp-link">
+      💬 Chat on WhatsApp
+    </a>
+  </footer>
+
+<script>
+    const UPI_ID = "gpay-11228156095@okbizaxis";
+    const PAYEE_NAME = "MTB Electronics";
+
+    const DISCOUNTS = {
+        "SAVE10": { type: 'percentage', value: 0.10 },
+        "BIGSALE": { type: 'flat', value: 100, min: 2000 },
+        "NEWUSER": { type: 'flat', value: 50 }
+    };
+
+    let cart = [];
+
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        document.getElementById('toggle-icon').src = isDarkMode
+            ? 'https://img.icons8.com/ios-filled/50/ffffff/sun.png'
+            : 'https://img.icons8.com/ios-filled/50/ffffff/moon-symbol.png';
+        localStorage.setItem('darkMode', isDarkMode);
+    }
+    
+    function toggleDiscountSidebar() {
+        document.getElementById('discount-sidebar').classList.toggle('open');
+    }
+
+    function toggleCartSidebar() {
+        document.getElementById('cart-sidebar').classList.toggle('open');
+    }
+
+    function applyDiscount() {
+        const code = document.getElementById('discount-code').value.toUpperCase();
+        if (DISCOUNTS[code]) {
+            localStorage.setItem('discount', JSON.stringify({ code, ...DISCOUNTS[code] }));
+            alert(`Discount "${code}" applied successfully!`);
+            toggleDiscountSidebar();
+        } else {
+            localStorage.removeItem('discount');
+            alert(code ? 'Invalid discount code.' : 'No code entered.');
+        }
+        updateAllCards();
+        updateCartDisplay();
+    }
+
+    function calculateDiscountedPrice(originalPrice) {
+        const discount = JSON.parse(localStorage.getItem('discount') || '{}');
+        if (!discount.type) return { finalPrice: originalPrice, applied: false };
+
+        let finalPrice = originalPrice;
+        let applied = false;
+
+        if (discount.type === 'percentage') {
+            finalPrice = Math.round(originalPrice * (1 - discount.value));
+            applied = true;
+        } else if (discount.type === 'flat') {
+            if (discount.min && originalPrice >= discount.min) {
+                finalPrice = Math.max(0, originalPrice - discount.value);
+                applied = true;
+            } else if (!discount.min) {
+                finalPrice = Math.max(0, originalPrice - discount.value);
+                applied = true;
+            }
+        }
+        return { finalPrice, applied };
+    }
+
+    function updateCardDetails(card) {
+        const plansData = JSON.parse(card.getAttribute('data-plans'));
+        let selectedPlan = 'default';
+        const activeTab = card.querySelector('.plan-tab.active');
+        if (activeTab) {
+            selectedPlan = activeTab.dataset.plan;
+        }
+
+        const basePrice = plansData[selectedPlan].price;
+        const name = card.getAttribute('data-product-name');
+        const cartItem = cart.find(item => item.name === name);
+        const quantity = cartItem ? cartItem.quantity : 1;
+        const subtotal = basePrice * quantity;
+
+        const { finalPrice } = calculateDiscountedPrice(subtotal);
+        
+        const priceElement = card.querySelector('.product-price');
+        const priceDisplay = plansData[selectedPlan].display;
+        
+        if (cartItem) {
+            priceElement.innerHTML = `₹${finalPrice} <span class="mrp">₹${subtotal}</span>`;
+        } else {
+            priceElement.textContent = priceDisplay;
+            if (plansData.default && plansData.default.price) {
+                priceElement.innerHTML += ` <span class="mrp">₹${plansData.default.price}</span>`;
+            }
+        }
+        
+        const upiUri = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(PAYEE_NAME)}&cu=INR&am=${finalPrice}`;
+        const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(upiUri)}`;
+        
+        card.querySelector('.pay-btn').href = upiUri;
+        card.querySelector('.qr-code').src = qrCodeUrl;
+        card.querySelector('.qr-text').textContent = `Scan to Pay ₹${finalPrice}`;
+    }
+
+    function updateAllCards() {
+        document.querySelectorAll('.product-card').forEach(card => updateCardDetails(card));
+    }
+
+    function addToCart(productCard) {
+        const name = productCard.getAttribute('data-product-name');
+        const image = productCard.querySelector('.product-image').src;
+        const plansData = JSON.parse(productCard.getAttribute('data-plans'));
+        
+        let selectedPlan = 'default';
+        const activeTab = productCard.querySelector('.plan-tab.active');
+        if (activeTab) {
+            selectedPlan = activeTab.dataset.plan;
+        }
+
+        const price = plansData[selectedPlan].price;
+        const planDisplay = plansData[selectedPlan].display;
+
+        const existingItem = cart.find(cartItem => cartItem.name === name);
+        if (existingItem) {
+            existingItem.quantity = (existingItem.quantity || 1) + 1;
+        } else {
+            cart.push({ name, image, price, planDisplay, quantity: 1 });
+        }
+        
+        updateCartDisplay();
+        updateCardStates();
+    }
+    
+    function updateQuantity(productCard, change) {
+        const name = productCard.getAttribute('data-product-name');
+        const existingItem = cart.find(cartItem => cartItem.name === name);
+        
+        if (existingItem) {
+            existingItem.quantity += change;
+            if (existingItem.quantity <= 0) {
+                removeItem(name);
+            }
+        }
+        
+        updateCartDisplay();
+        updateCardStates();
+    }
+    
+    function removeItem(name) {
+        cart = cart.filter(item => item.name !== name);
+        updateCartDisplay();
+        updateCardStates();
+    }
+    
+    function updateCardStates() {
+        document.querySelectorAll('.product-card').forEach(card => {
+            const name = card.getAttribute('data-product-name');
+            const cartItem = cart.find(item => item.name === name);
+            const addToCartBtnContainer = card.querySelector('.add-to-cart-btn-container');
+            const quantityControls = card.querySelector('.quantity-controls');
+            
+            if (cartItem) {
+                addToCartBtnContainer.querySelector('.add-to-cart-btn').style.display = 'none';
+                quantityControls.style.display = 'flex';
+                quantityControls.querySelector('.quantity-value').textContent = cartItem.quantity;
+            } else {
+                addToCartBtnContainer.querySelector('.add-to-cart-btn').style.display = 'block';
+                quantityControls.style.display = 'none';
+            }
+        });
+        updateAllCards();
+    }
+
+    function updateCartDisplay() {
+        const cartItemsContainer = document.getElementById('cart-items');
+        cartItemsContainer.innerHTML = '';
+        
+        let subtotal = 0;
+
+        cart.forEach((item, index) => {
+            const itemElement = document.createElement('div');
+            itemElement.classList.add('cart-item');
+            itemElement.innerHTML = `
+                <img src="${item.image}" alt="${item.name}" class="cart-item-img">
+                <div class="cart-item-details">
+                    <h4>${item.name}</h4>
+                    <p>₹${item.price} x ${item.quantity}</p>
+                    <p>${item.planDisplay}</p>
+                </div>
+                <button class="remove-item-btn" onclick="removeItem('${item.name}')">&times;</button>
+            `;
+            cartItemsContainer.appendChild(itemElement);
+            subtotal += item.price * item.quantity;
+        });
+
+        const { finalPrice, applied } = calculateDiscountedPrice(subtotal);
+        const discountAmount = applied ? subtotal - finalPrice : 0;
+        
+        document.getElementById('cart-subtotal').textContent = `₹${subtotal}`;
+        document.getElementById('cart-discount').textContent = `₹${discountAmount}`;
+        document.getElementById('cart-total').textContent = `₹${finalPrice}`;
+        document.getElementById('cart-counter').textContent = cart.length;
+
+        const upiUri = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(PAYEE_NAME)}&cu=INR&am=${finalPrice}`;
+        const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(upiUri)}`;
+
+        document.getElementById('checkout-btn').href = upiUri;
+        document.getElementById('cart-qr-code').src = qrCodeUrl;
+        document.getElementById('cart-qr-text').textContent = `Scan to Pay ₹${finalPrice}`;
+
+        if (cart.length === 0) {
+            document.getElementById('checkout-btn').style.display = 'none';
+            document.getElementById('cart-qr-code').style.display = 'none';
+            document.getElementById('cart-qr-text').style.display = 'none';
+        } else {
+            document.getElementById('checkout-btn').style.display = 'block';
+            document.getElementById('cart-qr-code').style.display = 'block';
+            document.getElementById('cart-qr-text').style.display = 'block';
+        }
+    }
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedTheme = localStorage.getItem('theme') || 'default';
+        document.body.className = savedTheme === 'default' ? '' : savedTheme;
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('toggle-icon').src = 'https://img.icons8.com/ios-filled/50/ffffff/sun.png';
+        }
+
+        document.querySelectorAll('.theme-dot').forEach(dot => {
+            dot.addEventListener('click', () => {
+                const theme = dot.dataset.theme;
+                document.body.className = document.body.classList.contains('dark-mode') ? 'dark-mode' : '';
+                if(theme !== 'default') document.body.classList.add(theme);
+                localStorage.setItem('theme', theme);
+            });
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.product-card').forEach(card => observer.observe(card));
+
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.addEventListener('click', e => {
+                if (e.target.closest('.plan-tab, .add-to-cart-btn-container, .info-icon')) return;
+                card.classList.toggle('flipped');
+            });
+
+            card.querySelectorAll('.plan-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    card.querySelectorAll('.plan-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    updateCardDetails(card);
+                });
+            });
+
+            const infoIcon = card.querySelector('.info-icon');
+            const modal = document.getElementById('info-modal');
+            infoIcon.addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.getElementById('modal-body').innerHTML = card.getAttribute('data-info');
+                modal.classList.add('show');
+            });
+
+            card.querySelector('.add-to-cart-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                addToCart(card);
+            });
+            
+            card.querySelector('.quantity-minus').addEventListener('click', (e) => {
+                e.stopPropagation();
+                updateQuantity(card, -1);
+            });
+            
+            card.querySelector('.quantity-plus').addEventListener('click', (e) => {
+                e.stopPropagation();
+                updateQuantity(card, 1);
+            });
+        });
+
+        const modal = document.getElementById('info-modal');
+        const closeModal = () => modal.classList.remove('show');
+        modal.querySelector('.modal-close').addEventListener('click', closeModal);
+        modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+
+        updateAllCards();
+    });
+</script>
+
+</body>
+</html>
