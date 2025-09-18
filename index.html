@@ -1,11 +1,18 @@
 <!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Preview</title>
+</head>
+<body>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Shop for Android TV Boxes, WiFi Routers, 5G Phones, and Smart WiFi Bulbs.">
   <meta name="keywords" content="Android TV Box, WiFi Router, 5G Phones, Smart Bulbs, electronics shop">
-  <title>MTB Electronics Shop</title>
+  <title>MTB Smartshop</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     /* General Styles & Themes */
@@ -148,7 +155,7 @@
       background: var(--card-bg-light);
     }
     .product-card:hover .card-inner {
-        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        box-shadow: 10px 10px 20px rgba(0,0,0,0.2);
     }
     body.dark-mode .card-inner {
       background: var(--card-bg-dark);
@@ -181,7 +188,7 @@
     /* Card Content */
     .product-image {
       max-width: 120px;
-      height: 120px;
+      max-height: 120px;
       object-fit: contain;
     }
     .product-card h2 {
@@ -201,13 +208,19 @@
       color: #888;
       margin-left: 8px;
     }
-    .plan-tabs {
+    .product-price .discount-applied-text {
+        font-size: 14px;
+        color: var(--accent-color);
+        margin-left: 8px;
+        font-weight: 500;
+    }
+    .plan-tabs, .variant-options {
       display: flex;
       justify-content: center;
       margin: 10px 0;
       gap: 10px;
     }
-    .plan-tab {
+    .plan-tab, .variant-option {
       background-color: #e0e0e0;
       border: 1px solid transparent;
       padding: 8px 15px;
@@ -215,11 +228,12 @@
       cursor: pointer;
       font-size: 14px;
       transition: all 0.3s;
+      white-space: nowrap;
     }
-    body.dark-mode .plan-tab {
+    body.dark-mode .plan-tab, body.dark-mode .variant-option {
       background-color: #333;
     }
-    .plan-tab.active {
+    .plan-tab.active, .variant-option.active {
       background-color: var(--primary-color);
       color: white;
       font-weight: 600;
@@ -314,9 +328,21 @@
     .discount-sidebar h3 { font-size: 20px; margin-bottom: 15px; color: var(--primary-color); }
     .discount-sidebar ul { list-style: none; padding-left: 0; margin-bottom: 20px; }
     .discount-sidebar li { font-size: 14px; margin-bottom: 10px; }
-    .discount-input { display: flex; gap: 10px; margin-bottom: 20px; }
-    #discount-code { padding: 8px; border-radius: 5px; border: 1px solid #ccc; font-size: 14px; flex: 1; }
+    .discount-input { display: flex; gap: 10px; margin-bottom: 20px; position: relative; }
+    #discount-code { padding: 8px 30px 8px 8px; border-radius: 5px; border: 1px solid #ccc; font-size: 14px; flex: 1; }
     .discount-sidebar button { background: var(--accent-color); color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
+    .clear-coupon-btn {
+        position: absolute;
+        right: 50px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        font-size: 18px;
+        color: #888;
+        cursor: pointer;
+        display: none;
+    }
 
     /* Info (!) Button and Modal */
     .info-icon { position: absolute; top: 15px; right: 15px; width: 28px; height: 28px; background-color: var(--primary-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; z-index: 10; font-family: 'Arial', sans-serif; transition: background-color 0.4s; }
@@ -340,10 +366,7 @@
     }
     body.dark-mode footer { background: var(--header-bg-dark); }
     footer p { font-size: 14px; margin-bottom: 10px; }
-    footer a { color: var(--accent-color); text-decoration: none; font-weight: 600; }
-    footer .whatsapp-link { display: inline-block; margin-top: 10px; padding: 10px 20px; background-color: #25D366; color: white; border-radius: 25px; text-decoration: none; font-weight: bold; transition: transform 0.2s, box-shadow 0.2s; }
-    footer .whatsapp-link:hover { transform: scale(1.05); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-
+    
     /* New Cart Styles */
     .cart-icon {
         position: relative;
@@ -479,6 +502,32 @@
         color: inherit;
         cursor: pointer;
     }
+    /* Floating WhatsApp Button */
+    .whatsapp-float {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #25D366;
+        color: white;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        z-index: 1000;
+        text-decoration: none;
+        transition: transform 0.2s;
+    }
+    .whatsapp-float:hover {
+        transform: scale(1.1);
+    }
+    .whatsapp-float img {
+        width: 32px;
+        height: 32px;
+    }
+
 
     /* Mobile Responsiveness */
     @media (max-width: 768px) {
@@ -508,7 +557,7 @@
     }
   </style>
 </head>
-<body>
+<body class="theme-ocean">
 
   <header>
     <div class="theme-switcher">
@@ -517,7 +566,7 @@
         <div class="theme-dot" style="background: #fd7e14;" data-theme="theme-sunset" title="Sunset Orange"></div>
         <div class="theme-dot" style="background: #28a745;" data-theme="theme-forest" title="Forest Green"></div>
     </div>
-    MTB Electronics Shop
+    MTB Smart Shop
     <div class="header-icons">
         <img src="https://img.icons8.com/ios-filled/50/ffffff/discount.png" class="discount-toggle" onclick="toggleDiscountSidebar()" title="View Discounts" />
         <img id="toggle-icon" src="https://img.icons8.com/ios-filled/50/ffffff/moon-symbol.png" class="dark-toggle" onclick="toggleDarkMode()" title="Toggle Dark Mode" />
@@ -531,13 +580,13 @@
   <div id="discount-sidebar" class="discount-sidebar">
     <h3>Special Offers</h3>
     <ul>
-      <li><strong>SAVE10:</strong> 10% off on all products.</li>
-      <li><strong>BIGSALE:</strong> ₹100 off on orders above ₹2000.</li>
-      <li><strong>NEWUSER:</strong> Flat ₹50 off on first purchase.</li>
+      <li><strong>SAVE5:</strong> 5% off on all products.</li>
+      <li><strong>MYMTB:</strong> ₹100 off on orders above ₹2000.</li>
     </ul>
     <div class="discount-input">
       <input type="text" id="discount-code" placeholder="Enter Code" />
       <button onclick="applyDiscount()">Apply</button>
+      <button class="clear-coupon-btn" onclick="clearCoupon()">&times;</button>
     </div>
     <button onclick="toggleDiscountSidebar()">Close</button>
   </div>
@@ -560,18 +609,19 @@
 
   <div class="container">
     <div class="product-card" data-product-name="Android TV Box 4K"
-         data-plans='{"monthly": {"price": 1780, "display": "₹180/mo + ₹1600 Install"}, "lifetime": {"price": 8999, "display": "₹8999"}}'
-         data-info="<h3>Android TV Box T&Cs</h3><p>The monthly plan requires an initial payment covering the first month and the installation fee. All hardware remains the property of MTB Electronics under the monthly plan. Lifetime plan includes ownership of the device. Warranty is valid for 1 year on all devices.</p>">
+         data-plans='{"monthly": {"price": 1780, "display": "₹180/mo + ₹1600 Install", "mrp": 2999}, "lifetime": {"price": 8999, "display": "₹8999", "mrp": 12999}}'
+         data-info="<h3>Smart TV Box</h3><p>The monthly plan requires an initial payment covering the first month and the installation fee. All hardware remains the property of MTB Smartshop under the monthly plan. Lifetime plan includes 7 years of subscriptions. [Note: The Smart TV Box Is internet or wifi based. It can support your old crt/box tv and your tv will become smart. And if you already have a android or smart tv then you can enjoy this service by paying ₹150 per month and ₹500 first time setup charge. No need for the Smart TV Box. Say goodbye to your cable operator and join us]</p>">
       <div class="card-inner">
         <div class="card-front">
           <div class="info-icon">!</div>
-          <img src="https://i.imgur.com/8xYSc2n.png" alt="Android TV Box" class="product-image">
-          <h2>Android TV Box 4K</h2>
+          <img src="https://raw.githubusercontent.com/mtbott/smartshop/refs/heads/main/WhatsApp%20Image%202025-09-16%20at%2020.59.41_58905637.jpg" alt="Smart TV Box" class="product-image">
+          <h2>Smart TV Box 4K</h2>
+          <h6>500+ TV channels + JioHotstar, Zee5, SonyLIV and More | Old CRT TV Supports</h6>
           <div class="plan-tabs">
             <button class="plan-tab active" data-plan="monthly">Monthly</button>
             <button class="plan-tab" data-plan="lifetime">Lifetime</button>
           </div>
-          <p class="product-price">₹180/mo + ₹1600 Install <span class="mrp">₹2999</span></p>
+          <p class="product-price">₹180/mo + ₹1600 Install</p>
           <div class="add-to-cart-btn-container">
             <button class="add-to-cart-btn">Add to Cart</button>
             <div class="quantity-controls">
@@ -590,14 +640,15 @@
       </div>
     </div>
     <div class="product-card" data-product-name="Dual-Band WiFi Router"
-         data-plans='{"default": {"price": 1999, "display": "₹1999"}}'
-         data-info="<h3>WiFi Router T&Cs</h3><p>This router supports speeds up to 1200 Mbps. Comes with a 2-year manufacturer warranty. Professional installation is available for an additional fee. Please contact us for details.</p>">
+         data-variants='{"default": {"price": 1699, "mrp": 3499}}'
+         data-info="<h3>WiFi Router T&Cs</h3><p>This powerful Dual-Band router worth ₹5999 supports speeds up to 1 Gbps*. Comes with 1-year manufacturer warranty. Professional home installation available at free of cost. Please contact us for details and low price Single-Band routers.</p>">
       <div class="card-inner">
         <div class="card-front">
           <div class="info-icon">!</div>
-          <img src="https://i.imgur.com/KDKaIay.png" alt="WiFi Router" class="product-image">
-          <h2>Dual-Band WiFi Router</h2>
-          <p class="product-price">₹1999 <span class="mrp">₹3499</span></p>
+          <img src="https://raw.githubusercontent.com/mtbott/smartshop/refs/heads/main/WhatsApp%20Image%202025-09-16%20at%2020.59.41_8ca22ea2.jpg" alt="WiFi Router" class="product-image">
+          <h2>WiFi 6 Router/Extender</h2>
+          <h6>Powerful Dual-Band Router | MRP: 5999 | Free Intallation & Home Setup</h6>
+          <p class="product-price">₹1699</p>
           <div class="add-to-cart-btn-container">
             <button class="add-to-cart-btn">Add to Cart</button>
             <div class="quantity-controls">
@@ -616,14 +667,19 @@
       </div>
     </div>
     <div class="product-card" data-product-name="Affordable 5G Phone"
-         data-plans='{"default": {"price": 9999, "display": "₹9999"}}'
-         data-info="<h3>5G Smartphone T&Cs</h3><p>This is an entry-level 5G smartphone. Price is inclusive of all taxes. Comes with a 1-year brand warranty. Charger and cable are included in the box. No-cost EMI options are available.</p>">
+         data-variants='{"4GB": {"price": 8999, "mrp": 10999}, "8GB": {"price": 11999, "mrp": 14999}}'
+         data-info="<h3>5G Smartphone</h3><p>This 5G smartphone comes with powerfull processor including flagship features like NFC for contactless payments and Bypass charging. It supports 5G+. We offer 1-year brand warranty. 3 Months No-cost EMI options are available with ₹7000 down payment only. For detaild device info, contact us. We also offer diffrent phones too with discounts as per your need.</p>">
       <div class="card-inner">
         <div class="card-front">
           <div class="info-icon">!</div>
-          <img src="https://i.imgur.com/R3854gG.png" alt="5G Phone" class="product-image">
-          <h2>Affordable 5G Phone</h2>
-          <p class="product-price">₹9999 <span class="mrp">₹12999</span></p>
+          <img src="https://raw.githubusercontent.com/mtbott/smartshop/refs/heads/main/WhatsApp%20Image%202025-09-16%20at%2020.59.42_859d955a.jpg" alt="5G Phone" class="product-image">
+          <h2>Affordable 5G+ Phone</h2>
+          <h6>It's Fast! With NFC and Bypass Charging</h6>
+          <div class="variant-options">
+            <button class="variant-option active" data-variant="4GB">4GB</button>
+            <button class="variant-option" data-variant="8GB">8GB</button>
+          </div>
+          <p class="product-price">₹8999</p>
           <div class="add-to-cart-btn-container">
             <button class="add-to-cart-btn">Add to Cart</button>
             <div class="quantity-controls">
@@ -642,14 +698,76 @@
       </div>
     </div>
     <div class="product-card" data-product-name="Smart WiFi Bulb"
-         data-plans='{"default": {"price": 699, "display": "₹699"}}'
-         data-info="<h3>Smart WiFi Bulb T&Cs</h3><p>16 million colors. Works with Alexa and Google Assistant. Requires a 2.4GHz WiFi connection. One year warranty against manufacturing defects. The controlling app is available on both Android and iOS.</p>">
+         data-variants='{"default": {"price": 599, "mrp": 1199}}'
+         data-info="<h3>Smart WiFi Bulb T&Cs</h3><p>16 million colors. Works with Alexa and Google Assistant too. Requires a 2.4GHz WiFi connection. One year warranty against manufacturing defects. The controlling app is available on both Android and iOS. For 5+ bulk orders and 15% off coupon, Contact us.</p>">
       <div class="card-inner">
         <div class="card-front">
           <div class="info-icon">!</div>
-          <img src="https://i.imgur.com/uG90vAn.png" alt="Smart Bulb" class="product-image">
-          <h2>Smart WiFi Bulb</h2>
-          <p class="product-price">₹699 <span class="mrp">₹1199</span></p>
+          <img src="https://raw.githubusercontent.com/mtbott/smartshop/refs/heads/main/WhatsApp%20Image%202025-09-16%20at%2020.59.41_1650de9d.jpg" alt="Smart Bulb" class="product-image">
+          <h2>The Smart Bulb</h2>
+          <p class="product-price">₹599</p>
+          <div class="add-to-cart-btn-container">
+            <button class="add-to-cart-btn">Add to Cart</button>
+            <div class="quantity-controls">
+                <button class="quantity-minus">-</button>
+                <span class="quantity-value">1</span>
+                <button class="quantity-plus">+</button>
+            </div>
+          </div>
+          <div class="flip-indicator">Tap card for QR Code</div>
+        </div>
+        <div class="card-back">
+          <a class="pay-btn" href="#" target="_blank">Pay Now</a>
+          <img class="qr-code" src="" alt="UPI QR Code">
+          <p class="qr-text">Scan to Pay</p>
+        </div>
+      </div>
+    </div>
+    <div class="product-card" data-product-name="MTB Laptop"
+         data-variants='{"i5": {"price": 36999, "mrp": 42999}, "i7": {"price": 39999, "mrp": 45999}}'
+         data-info="<h3>Laptop T&Cs</h3><p>These laptop features a 15.6-inch Full HD display, Intel Core i5 & i7 powerful processor, 8GB to 16GB RAM, and 512GB to 1TB SSD. Ideal for daily productivity and entertainment. Comes with a 1-year carry-in brand warranty and pre-installed Windows 11.</p>">
+      <div class="card-inner">
+        <div class="card-front">
+          <div class="info-icon">!</div>
+          <img src="https://raw.githubusercontent.com/mtbott/smartshop/refs/heads/main/WhatsApp%20Image%202025-09-16%20at%2020.59.42_2cfda123.jpg" alt="MTB Laptop" class="product-image">
+          <h2>Our Laptops</h2>
+          <h6>Fingerprint Lock | Metal Body | Fast Processor | Lowest Price</h6>
+          <div class="variant-options">
+            <button class="variant-option active" data-variant="i5">i5</button>
+            <button class="variant-option" data-variant="i7">i7</button>
+          </div>
+          <p class="product-price">₹36999</p>
+          <div class="add-to-cart-btn-container">
+            <button class="add-to-cart-btn">Add to Cart</button>
+            <div class="quantity-controls">
+                <button class="quantity-minus">-</button>
+                <span class="quantity-value">1</span>
+                <button class="quantity-plus">+</button>
+            </div>
+          </div>
+          <div class="flip-indicator">Tap card for QR Code</div>
+        </div>
+        <div class="card-back">
+          <a class="pay-btn" href="#" target="_blank">Pay Now</a>
+          <img class="qr-code" src="" alt="UPI QR Code">
+          <p class="qr-text">Scan to Pay</p>
+        </div>
+      </div>
+    </div>
+    <div class="product-card" data-product-name="Smart TV"
+         data-variants='{"32-inch": {"price": 8999, "mrp": 10999}, "43-inch": {"price": 14999, "mrp": 18999}}'
+         data-info="<h3>Smart TV</h3><p>Our affordable Smart TV for your family! Enjoy seamless streaming with pre-installed entertainment apps, based on Android with Bluetooth and Wifi. Works with Set-Top-Box too. 32 inch comes with HD and 43 inch comes with FHD. Free home installation and demo available. For more bigger size at discouted price, Contact us.</p>">
+      <div class="card-inner">
+        <div class="card-front">
+          <div class="info-icon">!</div>
+          <img src="https://www.smarttech-tv.com/image/cache/catalog/65_E1_4K_UHD_And/65E1_4K_AndroidTV_Front-700x500.jpg" alt="Smart TV" class="product-image">
+          <h2>Smart TV</h2>
+          <h6>Android Based | HDMI & USB Ports | Lowest Price Ever</h6>
+          <div class="variant-options">
+            <button class="variant-option active" data-variant="32-inch">32 inch</button>
+            <button class="variant-option" data-variant="43-inch">43 inch</button>
+          </div>
+          <p class="product-price">₹8999</p>
           <div class="add-to-cart-btn-container">
             <button class="add-to-cart-btn">Add to Cart</button>
             <div class="quantity-controls">
@@ -677,21 +795,21 @@
   </div>
 
   <footer>
-    <p>&copy; 2025 - MTB Electronics Shop</p>
-    <p>Built with ❤️ by Sanket | For support, contact us on WhatsApp.</p>
-    <a href="https://api.whatsapp.com/send?phone=919091544508" target="_blank" class="whatsapp-link">
-      💬 Chat on WhatsApp
-    </a>
+    <p>&copy; 2025 - MTB Smartshop</p>
+    <p>Built with ❤️</p>
   </footer>
+
+  <a href="https://api.whatsapp.com/send?phone=919091544508" target="_blank" class="whatsapp-float" title="Chat on WhatsApp">
+    <img src="https://img.icons8.com/color/48/000000/whatsapp--v1.png" alt="WhatsApp Icon" />
+  </a>
 
 <script>
     const UPI_ID = "gpay-11228156095@okbizaxis";
     const PAYEE_NAME = "MTB Electronics";
 
     const DISCOUNTS = {
-        "SAVE10": { type: 'percentage', value: 0.10 },
-        "BIGSALE": { type: 'flat', value: 100, min: 2000 },
-        "NEWUSER": { type: 'flat', value: 50 }
+        "SAVE5": { type: 'percentage', value: 0.05 },
+        "MYMTB": { type: 'flat', value: 100, min: 2000 }
     };
 
     let cart = [];
@@ -715,17 +833,30 @@
 
     function applyDiscount() {
         const code = document.getElementById('discount-code').value.toUpperCase();
+        const clearBtn = document.querySelector('.clear-coupon-btn');
         if (DISCOUNTS[code]) {
             localStorage.setItem('discount', JSON.stringify({ code, ...DISCOUNTS[code] }));
             alert(`Discount "${code}" applied successfully!`);
             toggleDiscountSidebar();
+            clearBtn.style.display = 'inline';
         } else {
             localStorage.removeItem('discount');
             alert(code ? 'Invalid discount code.' : 'No code entered.');
+            clearBtn.style.display = 'none';
         }
         updateAllCards();
         updateCartDisplay();
     }
+    
+    function clearCoupon() {
+        localStorage.removeItem('discount');
+        document.getElementById('discount-code').value = '';
+        document.querySelector('.clear-coupon-btn').style.display = 'none';
+        alert('Coupon removed successfully!');
+        updateAllCards();
+        updateCartDisplay();
+    }
+
 
     function calculateDiscountedPrice(originalPrice) {
         const discount = JSON.parse(localStorage.getItem('discount') || '{}');
@@ -750,64 +881,100 @@
     }
 
     function updateCardDetails(card) {
-        const plansData = JSON.parse(card.getAttribute('data-plans'));
-        let selectedPlan = 'default';
-        const activeTab = card.querySelector('.plan-tab.active');
-        if (activeTab) {
-            selectedPlan = activeTab.dataset.plan;
+        let basePrice, mrp, display;
+        
+        // Handle products with 'plans' (like TV Box)
+        if (card.dataset.plans) {
+            const plansData = JSON.parse(card.dataset.plans);
+            const activePlan = card.querySelector('.plan-tab.active')?.dataset.plan || 'monthly';
+            const data = plansData[activePlan];
+            basePrice = data.price;
+            mrp = data.mrp;
+            display = data.display;
+        } 
+        // Handle products with 'variants' (like new cards)
+        else if (card.dataset.variants) {
+            const variantsData = JSON.parse(card.dataset.variants);
+            const activeVariant = card.querySelector('.variant-option.active')?.dataset.variant || 'default';
+            const data = variantsData[activeVariant];
+            basePrice = data.price;
+            mrp = data.mrp;
+            display = `₹${basePrice}`;
+        } else {
+            // Fallback for single-option products (like WiFi Router, Smart Bulb)
+            // This code block is no longer needed as all products are now handled by the if/else if blocks
         }
-
-        const basePrice = plansData[selectedPlan].price;
+        
+        // Calculate the price for the QR code based on cart quantity
         const name = card.getAttribute('data-product-name');
-        const cartItem = cart.find(item => item.name === name);
+        const activeOption = card.querySelector('.plan-tab.active')?.dataset.plan || card.querySelector('.variant-option.active')?.dataset.variant || 'default';
+        const cartItem = findCartItem(name, activeOption);
         const quantity = cartItem ? cartItem.quantity : 1;
-        const subtotal = basePrice * quantity;
-
-        const { finalPrice } = calculateDiscountedPrice(subtotal);
+        const totalProductPrice = basePrice * quantity;
+        
+        const { finalPrice, applied } = calculateDiscountedPrice(basePrice);
+        const { finalPrice: finalTotalProductPrice } = calculateDiscountedPrice(totalProductPrice);
         
         const priceElement = card.querySelector('.product-price');
-        const priceDisplay = plansData[selectedPlan].display;
         
-        if (cartItem) {
-            priceElement.innerHTML = `₹${finalPrice} <span class="mrp">₹${subtotal}</span>`;
+        if (applied) {
+            priceElement.innerHTML = `₹${finalPrice} <span class="discount-applied-text">Discount applied</span>`;
         } else {
-            priceElement.textContent = priceDisplay;
-            if (plansData.default && plansData.default.price) {
-                priceElement.innerHTML += ` <span class="mrp">₹${plansData.default.price}</span>`;
-            }
+            priceElement.textContent = display;
         }
-        
-        const upiUri = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(PAYEE_NAME)}&cu=INR&am=${finalPrice}`;
+
+        const payBtn = card.querySelector('.pay-btn');
+        const qrCodeImg = card.querySelector('.qr-code');
+        const qrText = card.querySelector('.qr-text');
+
+        const upiUri = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(PAYEE_NAME)}&cu=INR&am=${finalTotalProductPrice}`;
         const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(upiUri)}`;
         
-        card.querySelector('.pay-btn').href = upiUri;
-        card.querySelector('.qr-code').src = qrCodeUrl;
-        card.querySelector('.qr-text').textContent = `Scan to Pay ₹${finalPrice}`;
+        payBtn.href = upiUri;
+        qrCodeImg.src = qrCodeUrl;
+        qrText.textContent = `Scan to Pay ₹${finalTotalProductPrice}`;
     }
 
     function updateAllCards() {
         document.querySelectorAll('.product-card').forEach(card => updateCardDetails(card));
     }
+    
+    function findCartItem(itemName, itemVariant = null) {
+        return cart.find(item => {
+            return item.name === itemName && item.variant === itemVariant;
+        });
+    }
 
     function addToCart(productCard) {
         const name = productCard.getAttribute('data-product-name');
         const image = productCard.querySelector('.product-image').src;
-        const plansData = JSON.parse(productCard.getAttribute('data-plans'));
         
-        let selectedPlan = 'default';
-        const activeTab = productCard.querySelector('.plan-tab.active');
-        if (activeTab) {
-            selectedPlan = activeTab.dataset.plan;
+        let selectedOption = null;
+        let price = null;
+        let planDisplay = null;
+        let mrp = null;
+
+        if (productCard.dataset.plans) {
+            const plansData = JSON.parse(productCard.dataset.plans);
+            const activePlan = productCard.querySelector('.plan-tab.active')?.dataset.plan || 'monthly';
+            selectedOption = activePlan;
+            price = plansData[selectedOption].price;
+            planDisplay = plansData[selectedOption].display;
+            mrp = plansData[selectedOption].mrp;
+        } else if (productCard.dataset.variants) {
+            const variantsData = JSON.parse(productCard.dataset.variants);
+            const activeVariant = productCard.querySelector('.variant-option.active')?.dataset.variant || 'default';
+            selectedOption = activeVariant;
+            price = variantsData[selectedOption].price;
+            planDisplay = null;
+            mrp = variantsData[selectedOption].mrp;
         }
-
-        const price = plansData[selectedPlan].price;
-        const planDisplay = plansData[selectedPlan].display;
-
-        const existingItem = cart.find(cartItem => cartItem.name === name);
+        
+        const existingItem = findCartItem(name, selectedOption);
         if (existingItem) {
             existingItem.quantity = (existingItem.quantity || 1) + 1;
         } else {
-            cart.push({ name, image, price, planDisplay, quantity: 1 });
+            cart.push({ name, image, variant: selectedOption, price, planDisplay, mrp, quantity: 1 });
         }
         
         updateCartDisplay();
@@ -816,12 +983,22 @@
     
     function updateQuantity(productCard, change) {
         const name = productCard.getAttribute('data-product-name');
-        const existingItem = cart.find(cartItem => cartItem.name === name);
+        const hasVariants = productCard.dataset.variants;
+        const hasPlans = productCard.dataset.plans;
+            
+        let activeOption = 'default';
+        if (hasPlans) {
+            activeOption = productCard.querySelector('.plan-tab.active')?.dataset.plan || 'monthly';
+        } else if (hasVariants) {
+            activeOption = productCard.querySelector('.variant-option.active')?.dataset.variant || 'default';
+        }
+        
+        const existingItem = findCartItem(name, activeOption);
         
         if (existingItem) {
             existingItem.quantity += change;
             if (existingItem.quantity <= 0) {
-                removeItem(name);
+                removeItem(name, activeOption);
             }
         }
         
@@ -829,8 +1006,8 @@
         updateCardStates();
     }
     
-    function removeItem(name) {
-        cart = cart.filter(item => item.name !== name);
+    function removeItem(name, variantName) {
+        cart = cart.filter(item => !(item.name === name && item.variant === variantName));
         updateCartDisplay();
         updateCardStates();
     }
@@ -838,21 +1015,36 @@
     function updateCardStates() {
         document.querySelectorAll('.product-card').forEach(card => {
             const name = card.getAttribute('data-product-name');
-            const cartItem = cart.find(item => item.name === name);
-            const addToCartBtnContainer = card.querySelector('.add-to-cart-btn-container');
-            const quantityControls = card.querySelector('.quantity-controls');
+            const hasVariants = card.dataset.variants;
+            const hasPlans = card.dataset.plans;
+            
+            // Fix: Added fallback to 'default' when no active option is found.
+            let activeOption = 'default';
+            if (hasPlans) {
+                activeOption = card.querySelector('.plan-tab.active')?.dataset.plan || 'monthly';
+            } else if (hasVariants) {
+                activeOption = card.querySelector('.variant-option.active')?.dataset.variant || 'default';
+            }
+
+            const controls = card.querySelector('.add-to-cart-btn-container');
+            const addToCartBtn = controls.querySelector('.add-to-cart-btn');
+            const quantityControls = controls.querySelector('.quantity-controls');
+            const quantityValue = quantityControls.querySelector('.quantity-value');
+
+            const cartItem = findCartItem(name, activeOption);
             
             if (cartItem) {
-                addToCartBtnContainer.querySelector('.add-to-cart-btn').style.display = 'none';
+                addToCartBtn.style.display = 'none';
                 quantityControls.style.display = 'flex';
-                quantityControls.querySelector('.quantity-value').textContent = cartItem.quantity;
+                quantityValue.textContent = cartItem.quantity;
             } else {
-                addToCartBtnContainer.querySelector('.add-to-cart-btn').style.display = 'block';
+                addToCartBtn.style.display = 'block';
                 quantityControls.style.display = 'none';
             }
         });
         updateAllCards();
     }
+
 
     function updateCartDisplay() {
         const cartItemsContainer = document.getElementById('cart-items');
@@ -860,17 +1052,20 @@
         
         let subtotal = 0;
 
-        cart.forEach((item, index) => {
+        cart.forEach((item) => {
             const itemElement = document.createElement('div');
             itemElement.classList.add('cart-item');
+            
+            const variantName = item.variant && item.variant !== 'default' ? ` (${item.variant})` : '';
+            const priceDisplay = item.planDisplay ? item.planDisplay : `₹${item.price}`;
+            
             itemElement.innerHTML = `
                 <img src="${item.image}" alt="${item.name}" class="cart-item-img">
                 <div class="cart-item-details">
-                    <h4>${item.name}</h4>
-                    <p>₹${item.price} x ${item.quantity}</p>
-                    <p>${item.planDisplay}</p>
+                    <h4>${item.name}${variantName}</h4>
+                    <p>${priceDisplay} x ${item.quantity}</p>
                 </div>
-                <button class="remove-item-btn" onclick="removeItem('${item.name}')">&times;</button>
+                <button class="remove-item-btn" onclick="removeItem('${item.name}', '${item.variant}')">&times;</button>
             `;
             cartItemsContainer.appendChild(itemElement);
             subtotal += item.price * item.quantity;
@@ -904,11 +1099,17 @@
 
 
     document.addEventListener('DOMContentLoaded', () => {
-        const savedTheme = localStorage.getItem('theme') || 'default';
+        const savedTheme = localStorage.getItem('theme') || 'theme-ocean';
         document.body.className = savedTheme === 'default' ? '' : savedTheme;
         if (localStorage.getItem('darkMode') === 'true') {
             document.body.classList.add('dark-mode');
             document.getElementById('toggle-icon').src = 'https://img.icons8.com/ios-filled/50/ffffff/sun.png';
+        }
+        
+        const couponCode = localStorage.getItem('discount');
+        if (couponCode) {
+            document.getElementById('discount-code').value = JSON.parse(couponCode).code;
+            document.querySelector('.clear-coupon-btn').style.display = 'inline';
         }
 
         document.querySelectorAll('.theme-dot').forEach(dot => {
@@ -932,37 +1133,49 @@
 
         document.querySelectorAll('.product-card').forEach(card => {
             card.addEventListener('click', e => {
-                if (e.target.closest('.plan-tab, .add-to-cart-btn-container, .info-icon')) return;
+                if (e.target.closest('.plan-tab, .variant-option, .add-to-cart-btn-container, .info-icon')) return;
                 card.classList.toggle('flipped');
             });
 
+            // Event listener for plans
             card.querySelectorAll('.plan-tab').forEach(tab => {
                 tab.addEventListener('click', () => {
                     card.querySelectorAll('.plan-tab').forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
                     updateCardDetails(card);
+                    updateCardStates();
+                });
+            });
+
+            // Event listener for variants
+            card.querySelectorAll('.variant-option').forEach(variant => {
+                variant.addEventListener('click', () => {
+                    card.querySelectorAll('.variant-option').forEach(v => v.classList.remove('active'));
+                    variant.classList.add('active');
+                    updateCardDetails(card);
+                    updateCardStates();
                 });
             });
 
             const infoIcon = card.querySelector('.info-icon');
             const modal = document.getElementById('info-modal');
-            infoIcon.addEventListener('click', (e) => {
+            infoIcon?.addEventListener('click', (e) => {
                 e.stopPropagation();
                 document.getElementById('modal-body').innerHTML = card.getAttribute('data-info');
                 modal.classList.add('show');
             });
 
-            card.querySelector('.add-to-cart-btn').addEventListener('click', (e) => {
+            card.querySelector('.add-to-cart-btn')?.addEventListener('click', (e) => {
                 e.stopPropagation();
                 addToCart(card);
             });
             
-            card.querySelector('.quantity-minus').addEventListener('click', (e) => {
+            card.querySelector('.quantity-minus')?.addEventListener('click', (e) => {
                 e.stopPropagation();
                 updateQuantity(card, -1);
             });
             
-            card.querySelector('.quantity-plus').addEventListener('click', (e) => {
+            card.querySelector('.quantity-plus')?.addEventListener('click', (e) => {
                 e.stopPropagation();
                 updateQuantity(card, 1);
             });
@@ -977,5 +1190,7 @@
     });
 </script>
 
+</body>
+</html>
 </body>
 </html>
