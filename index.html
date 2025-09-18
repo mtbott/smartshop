@@ -6,6 +6,13 @@
 </head>
 <body>
 <!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Preview</title>
+</head>
+<body>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -314,7 +321,7 @@
     .discount-sidebar {
       position: fixed;
       top: 0;
-      left: -300px;
+      left: -350px;
       width: 300px;
       height: 100%;
       background: var(--card-bg-light);
@@ -536,16 +543,20 @@
             padding: 10px;
             align-items: center;
         }
-        .theme-switcher {
-            position: static;
-            transform: none;
+        .mobile-top-row {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 10px;
         }
-        .header-icons {
+        .theme-switcher, .header-icons {
             position: static;
             transform: none;
-            width: 100%;
-            justify-content: space-around;
+            display: flex;
+        }
+        .header-icons {
+            gap: 10px;
         }
         .cart-sidebar {
             width: 100%;
@@ -560,21 +571,23 @@
 <body class="theme-ocean">
 
   <header>
-    <div class="theme-switcher">
-        <div class="theme-dot" style="background: #007bff;" data-theme="default" title="Default Blue"></div>
-        <div class="theme-dot" style="background: #17a2b8;" data-theme="theme-ocean" title="Ocean Blue"></div>
-        <div class="theme-dot" style="background: #fd7e14;" data-theme="theme-sunset" title="Sunset Orange"></div>
-        <div class="theme-dot" style="background: #28a745;" data-theme="theme-forest" title="Forest Green"></div>
-    </div>
-    MTB Smart Shop
-    <div class="header-icons">
-        <img src="https://img.icons8.com/ios-filled/50/ffffff/discount.png" class="discount-toggle" onclick="toggleDiscountSidebar()" title="View Discounts" />
-        <img id="toggle-icon" src="https://img.icons8.com/ios-filled/50/ffffff/moon-symbol.png" class="dark-toggle" onclick="toggleDarkMode()" title="Toggle Dark Mode" />
-        <div class="cart-icon" onclick="toggleCartSidebar()">
-            <img src="https://img.icons8.com/ios-filled/50/ffffff/shopping-cart.png" alt="Cart" title="View Cart" />
-            <span id="cart-counter" class="cart-counter">0</span>
+    <div class="mobile-top-row">
+        <div class="theme-switcher">
+            <div class="theme-dot" style="background: #007bff;" data-theme="default" title="Default Blue"></div>
+            <div class="theme-dot" style="background: #17a2b8;" data-theme="theme-ocean" title="Ocean Blue"></div>
+            <div class="theme-dot" style="background: #fd7e14;" data-theme="theme-sunset" title="Sunset Orange"></div>
+            <div class="theme-dot" style="background: #28a745;" data-theme="theme-forest" title="Forest Green"></div>
+        </div>
+        <div class="header-icons">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/discount.png" class="discount-toggle" onclick="toggleDiscountSidebar()" title="View Discounts" />
+            <img id="toggle-icon" src="https://img.icons8.com/ios-filled/50/ffffff/moon-symbol.png" class="dark-toggle" onclick="toggleDarkMode()" title="Toggle Dark Mode" />
+            <div class="cart-icon" onclick="toggleCartSidebar()">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/shopping-cart.png" alt="Cart" title="View Cart" />
+                <span id="cart-counter" class="cart-counter">0</span>
+            </div>
         </div>
     </div>
+    MTB Smart Shop
   </header>
 
   <div id="discount-sidebar" class="discount-sidebar">
@@ -1191,6 +1204,8 @@
     });
 </script>
 
+</body>
+</html>
 </body>
 </html>
 </body>
