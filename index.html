@@ -6,13 +6,6 @@
 </head>
 <body>
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Preview</title>
-</head>
-<body>
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -322,13 +315,16 @@
       position: fixed;
       top: 0;
       left: -350px;
-      width: 300px;
+      width: 90%;
+      max-width: 300px;
       height: 100%;
       background: var(--card-bg-light);
       padding: 20px;
       transition: left 0.4s ease;
       z-index: 1001;
       box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
     }
     .discount-sidebar.open { left: 0; }
     body.dark-mode .discount-sidebar { background: var(--card-bg-dark); }
@@ -337,18 +333,46 @@
     .discount-sidebar li { font-size: 14px; margin-bottom: 10px; }
     .discount-input { display: flex; gap: 10px; margin-bottom: 20px; position: relative; }
     #discount-code { padding: 8px 30px 8px 8px; border-radius: 5px; border: 1px solid #ccc; font-size: 14px; flex: 1; }
-    .discount-sidebar button { background: var(--accent-color); color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
-    .clear-coupon-btn {
-        position: absolute;
-        right: 50px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: none;
+    .discount-actions {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    .discount-sidebar button {
+        background: var(--accent-color);
+        color: white;
         border: none;
-        font-size: 18px;
-        color: #888;
+        padding: 8px 12px;
+        border-radius: 5px;
         cursor: pointer;
+        transition: background-color 0.4s, transform 0.2s;
+    }
+    .discount-sidebar button:hover {
+        transform: translateY(-2px);
+    }
+    .clear-coupon-btn {
+        background: #dc3545; /* Fixed red color for removal */
+        color: white;
+        font-size: 14px;
         display: none;
+    }
+    .clear-coupon-btn:hover {
+        background: #b52b39;
+    }
+    .discount-sidebar .close-btn {
+        margin-top: auto; /* Pushes the close button to the bottom */
+        width: 100%;
+        background-color: var(--primary-color);
+    }
+    .animated-apply-btn {
+        animation: color-change 4s infinite;
+    }
+    @keyframes color-change {
+        0% { background-color: #007bff; }
+        25% { background-color: #28a745; }
+        50% { background-color: #17a2b8; }
+        75% { background-color: #fd7e14; }
+        100% { background-color: #007bff; }
     }
 
     /* Info (!) Button and Modal */
@@ -403,7 +427,7 @@
     .cart-sidebar {
         position: fixed;
         top: 0;
-        right: -350px;
+        right: -400px;
         width: 350px;
         height: 100%;
         background: var(--card-bg-light);
@@ -598,10 +622,12 @@
     </ul>
     <div class="discount-input">
       <input type="text" id="discount-code" placeholder="Enter Code" />
-      <button onclick="applyDiscount()">Apply</button>
-      <button class="clear-coupon-btn" onclick="clearCoupon()">&times;</button>
     </div>
-    <button onclick="toggleDiscountSidebar()">Close</button>
+    <div class="discount-actions">
+        <button class="animated-apply-btn" onclick="applyDiscount()">Apply</button>
+        <button class="clear-coupon-btn" onclick="clearCoupon()">Remove Coupon</button>
+    </div>
+    <button class="close-btn" onclick="toggleDiscountSidebar()">Close</button>
   </div>
 
   <div id="cart-sidebar" class="cart-sidebar">
@@ -1204,8 +1230,6 @@
     });
 </script>
 
-</body>
-</html>
 </body>
 </html>
 </body>
